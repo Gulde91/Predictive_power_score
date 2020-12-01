@@ -1,75 +1,55 @@
 
-library(rpart)
-library(caret)
-library(MLmetrics)
-library(pROC)
 
-load("./Data/titanic.rda")
+# score -----------------------------------------------------------------------
+#' @title Calculates predictive power score
+#'
+#' @description Calculates predictive power score for `x` predicts `y`. This is
+#' a light wip implementation.
+#'
+#' @param df `data.frame` input data which contains `x` and `y`
+#' @param x `str` name of feature
+#' @param y `str` name of target
+#' @param cv_folds `int` number of cross validations folds
+#'
+#' @importFrom rpart rpart
+#' @importFrom pROC auc roc
+#'
+#' @return The predictive power score.
+#'
+score <- function(df, x, y, cv_folds = 5L) {
 
-data <- titanic
-x <- "parch"
-y <- "survived"
-cv_folds <- 4
+  stopifnot(is.data.frame(df), c(x, y) %in% names(df))
 
+  # removing NA
+  df <- na.omit(df[c(x, y)])
 
+  # Identifying cross validations folds
+  cv <- sample(1:cv_folds, size = nrow(df), replace = TRUE)
 
-cv <- sample(1:cv_folds, size = nrow(data), replace = TRUE)
+  results <- list()
 
-results <- list()
+  for (i in 1:cv_folds) {
 
-for (i in 1:cv_folds) {
+    # Splitting data
+    train <- data[cv != i, c(x, y)]
+    test <- data[cv == i, c(x, y)]
 
-  # dividing data
-  train <- data[cv != i, c(x, y)]
-  test <- data[cv == i, c(x, y)]
+    # Model
+    fit <- rpart(paste(y, "~", x), data = train, method = "class")
 
-  # model
-  fit <- rpart(paste(y, "~", x), data = train, method = "class")
+    # Predictions
+    pred <- predict(fit, test)[, 2]
 
-  # predictions
-  pred <- predict(fit, test)[, 2]
+    # Calculation roc auc
+    roc_auc <- suppressMessages(auc(roc(test[[y]], pred)))
 
-  # udregner roc auc
-  roc_auc <- suppressMessages(auc(roc(test[[y]], pred)))
+    results[i] <- roc_auc
 
-  results[i] <- roc_auc
+    #f1 <- F1_Score(test[[y]], pred)
+    # ConfusionDF(pred, test[[y]])
+  }
 
-  #f1 <- F1_Score(test[[y]], pred)
-  # ConfusionDF(pred, test[[y]])
-
-  # anden træ funktion
-  # fit_ny <- tree::tree(paste(y, "~", x), train, split = "gini")
-  # fit_cv <- tree::cv.tree(fit_ny, K = cv_folds)
-}
-
-sapply(1:cv_folds, function(i) get_cv_auc(x, y, data[cv != i, ], data[cv == i, ]))
-#sapply(4, function(i) get_cv_auc(x, y, data[cv != i, ], d[cv == i, ]))
-
-get_cv_auc <- function(x, y, train, test) {
-
-  # model
-  fit <- rpart(paste(y, "~", x), data = train, method = "class")
-
-  # predictions
-  pred <- predict(fit, test[x])[, 2]
-
-  # udregner roc auc
-  roc_auc <- suppressMessages(auc(roc(test[[y]], pred)))
+  mean(unlist(results))
 
 }
 
-
-pred <- predict(fit, df_test)
-
-
-
-# index <- createDataPartition(y, times = 2, p = 0.8)
-#
-# x_train <- x[index[[1]]]
-# x_test <- x[-index[[1]]]
-#
-# y_train <- y[index[[1]]]
-# y_test <- y[-index[[1]]]
-#
-# df_train <- data.frame(x = x_train, y = y_train)
-# df_test <- data.frame(x = x_test, y = y_test)
