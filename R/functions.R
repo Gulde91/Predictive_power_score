@@ -40,7 +40,7 @@ pp_score <- function(df, x, y, cv_folds) {
 #' @param cv_folds `int` number of cross validations folds
 #'
 #' @importFrom rpart rpart
-#' @importFrom pROC auc roc
+#' @importFrom MLmetrics AUC
 #'
 #' @return The predictive power score.
 #'
@@ -69,7 +69,7 @@ score <- function(df, x, y, cv_folds = 5L) {
     pred <- predict(fit, test)[, 2]
 
     # Calculation roc auc
-    roc_auc <- suppressMessages(auc(roc(test[[y]], pred)))
+    roc_auc <- AUC(pred, test[[y]])
 
     results[i] <- roc_auc
 

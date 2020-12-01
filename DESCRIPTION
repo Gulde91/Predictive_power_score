@@ -10,7 +10,7 @@ Authors@R:
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Imports: rpart,
-         pROC
+         MLmetrics
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
