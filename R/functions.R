@@ -58,11 +58,11 @@ score <- function(df, x, y, sample_size = NULL, cv_folds = 5L,
 
   stopifnot(is.numeric(df[[x]]), length(unique(df[[y]])) == 2)
 
-  # removing NA
+  # Removing NA
   df <- na.omit(df[c(x, y)])
   if (nrow(df) == 0) stop("Zero rows in data after removing NA's!")
 
-  # looping over repeated cv and cv folds
+  # Looping over repeated cv and cv folds
   results <- list()
 
   for(j in 1:repeated_cv) {
