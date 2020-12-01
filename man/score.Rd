@@ -20,5 +20,6 @@ The predictive power score.
 }
 \description{
 Calculates predictive power score for \code{x} predicts \code{y}. This is
-a light wip implementation.
+a light (wip) implementation which for now only supports binary
+classification and x as numeric a feature.
 }
