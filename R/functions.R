@@ -111,7 +111,7 @@ score <- function(df, x, y, sample_size = NULL, cv_folds = 5L,
 sample_data <- function(df, sample_size) {
 
   if (!is.null(sample_size))  {
-    df <- df[sample(df, sample_size), ]
+    df <- df[sample(nrow(df), sample_size), ]
   }
 
   return(df)
