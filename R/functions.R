@@ -50,6 +50,7 @@ pp_score <- function(df, x, y, sample_size = NULL,
 #'
 #' @importFrom rpart rpart
 #' @importFrom MLmetrics AUC
+#' @importFrom stats predict na.omit
 #'
 #' @return The predictive power score for `x`.
 #'

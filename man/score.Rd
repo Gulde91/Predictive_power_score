@@ -4,7 +4,7 @@
 \alias{score}
 \title{Calculates predictive power score}
 \usage{
-score(df, x, y, cv_folds = 5L)
+score(df, x, y, sample_size = NULL, cv_folds = 5L, repeated_cv = 1L)
 }
 \arguments{
 \item{df}{\code{data.frame} input data which contains \code{x} and \code{y}}
@@ -13,13 +13,21 @@ score(df, x, y, cv_folds = 5L)
 
 \item{y}{\code{str} name of target}
 
+\item{sample_size}{\code{int} random sample taken from \code{df} to speed
+up calculations. If \emph{NULL} all samples are used.}
+
 \item{cv_folds}{\code{int} number of cross validations folds}
+
+\item{repeated_cv}{\code{int} number of repeated cross validations}
 }
 \value{
-The predictive power score.
+The predictive power score for \code{x}.
 }
 \description{
 Calculates predictive power score for \code{x} predicts \code{y}. This is
 a light (wip) implementation which for now only supports binary
 classification and x as numeric a feature.
+}
+\details{
+for mere information: https://github.com/8080labs/ppscore
 }

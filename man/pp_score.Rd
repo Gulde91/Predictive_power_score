@@ -4,7 +4,7 @@
 \alias{pp_score}
 \title{pp_score}
 \usage{
-pp_score(df, x, y, cv_folds)
+pp_score(df, x, y, sample_size = NULL, cv_folds = 5, repeated_cv = 1)
 }
 \arguments{
 \item{df}{data.frame}
@@ -13,7 +13,12 @@ pp_score(df, x, y, cv_folds)
 
 \item{y}{\code{str} target feature}
 
+\item{sample_size}{\code{int} random sample taken from \code{df} to speed
+up calculations. If \emph{NULL} all samples are used.}
+
 \item{cv_folds}{number of cross validations folds}
+
+\item{repeated_cv}{\code{int} number of repeated cross validations}
 }
 \value{
 A list with the predictive power score for each feature in \code{x}
