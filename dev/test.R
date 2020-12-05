@@ -14,7 +14,7 @@ sim_feature[sim_response == 1] <- rnorm(length(sim_response[sim_response == 1]),
 plot(sim_feature, sim_response)
 df <- data.frame(y = sim_response, x = sim_feature)
 
-score(df, "x", "y", "F1", cv_folds = 4L, repeated_cv = 5L)
+score(df, "x", "y", "roc_auc", cv_folds = 4L, repeated_cv = 3L)
 
 
 

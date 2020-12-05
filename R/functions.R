@@ -96,6 +96,10 @@ score <- function(df, x, y, metric = "roc_auc", sample_size = NULL,
   }
 
   mean(unlist(results))
+
+  return(list(pp_score = mean(unlist(results)),
+              eval_metric = metric,
+              cv_scores = results))
 }
 
 # calculate_metric ------------------------------------------------------------
