@@ -9,8 +9,10 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
-Imports: rpart,
-         MLmetrics
+Imports: 
+    rpart,
+    MLmetrics,
+    magrittr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
