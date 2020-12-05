@@ -30,7 +30,6 @@ pp_score <- function(df, x, y, sample_size = NULL,
   return(results)
 }
 
-
 # score -----------------------------------------------------------------------
 #' @title Calculates predictive power score
 #'
@@ -49,17 +48,15 @@ pp_score <- function(df, x, y, sample_size = NULL,
 #' @param repeated_cv `int` number of repeated cross validations
 #'
 #' @importFrom rpart rpart
-#' @importFrom MLmetrics AUC
-#' @importFrom stats predict na.omit
 #'
 #' @return The predictive power score for `x`.
 #'
-score <- function(df, x, y, sample_size = NULL, cv_folds = 5L,
+score <- function(df, x, y, metric, sample_size = NULL, cv_folds = 5L,
                   repeated_cv = 1L) {
 
   stopifnot(is.numeric(df[[x]]), length(unique(df[[y]])) == 2)
 
-  # Removing NA
+  # Removing NA & keeping only x and y
   df <- na.omit(df[c(x, y)])
   if (nrow(df) == 0) stop("Zero rows in data after removing NA's!")
 
@@ -77,17 +74,17 @@ score <- function(df, x, y, sample_size = NULL, cv_folds = 5L,
     for (i in 1:cv_folds) {
 
       # Splitting data
-      train <- df_sampled[cv != i, c(x, y)]
-      test <- df_sampled[cv == i, c(x, y)]
+      train <- df_sampled[cv != i, ]
+      test <- df_sampled[cv == i, ]
 
       # Model
       fit <- rpart(paste(y, "~", x), data = train, method = "class")
 
-      # Predictions
-      pred <- predict(fit, test)[, 2]
+      # Calculation metric
+      out <- calculate_metric(fit, test[x], test[[y]], metric)
 
-      # Calculation roc auc
-      results[[as.character(j)]][i] <- AUC(pred, test[[y]])
+      # Save in results
+      results[[as.character(j)]][i] <- out
 
       #f1 <- F1_Score(test[[y]], pred)
       # ConfusionDF(pred, test[[y]])
@@ -95,7 +92,35 @@ score <- function(df, x, y, sample_size = NULL, cv_folds = 5L,
   }
 
   mean(unlist(results))
+}
 
+# calculate_metric ------------------------------------------------------------
+#' @title calculate_metric
+#'
+#' @param model `object` a model object
+#' @param df `data.frame` test data to score
+#' @param label `numeric` target vector
+#' @param metric `str` Machine learning metric to evaluate on. Choose between
+#' *roc_auc*.
+#'
+#' @importFrom MLmetrics AUC
+#' @importFrom stats predict na.omit
+#'
+#' @return `numeric` calculated ml metric
+#'
+calculate_metric <- function(model, df, label, metric) {
+
+  # Calculates metric
+  if (metric == "roc_auc") {
+
+    pred <- predict(model, df)[, 2]
+    out <- AUC(pred, label)
+
+  } else {
+    stop(paste(metric, "is not a valid option!"))
+  }
+
+  return(out)
 }
 
 # sample_data -----------------------------------------------------------------
