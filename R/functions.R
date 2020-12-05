@@ -90,8 +90,6 @@ score <- function(df, x, y, metric = "roc_auc", sample_size = NULL,
       # Save in results
       results[[as.character(j)]][i] <- out
 
-      #f1 <- F1_Score(test[[y]], pred)
-      # ConfusionDF(pred, test[[y]])
     }
   }
 
@@ -121,17 +119,17 @@ calculate_metric <- function(model, df, label, metric) {
   # Calculates metric
   if (metric == "roc_auc") {
 
-    pred <- predict(model, df)[, 2]
+    pred <- predict(model, df, type = "prob")[,2]
     out <- AUC(pred, label)
 
   } else if (metric == "pr_auc") {
 
-    pred <- predict(model, df)[, 2]
+    pred <- predict(model, df, type = "prob")[,2]
     out <- PRAUC(pred, label)
 
   } else if (metric == "F1") {
 
-    pred <- predict(model, df,type = "class")
+    pred <- predict(model, df, type = "class")
     out <- F1_Score(y_true = label, y_pred = pred)
 
   } else {
