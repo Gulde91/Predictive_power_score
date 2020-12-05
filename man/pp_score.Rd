@@ -4,7 +4,15 @@
 \alias{pp_score}
 \title{pp_score}
 \usage{
-pp_score(df, x, y, sample_size = NULL, cv_folds = 5, repeated_cv = 1)
+pp_score(
+  df,
+  x,
+  y,
+  metric = "roc_auc",
+  sample_size = NULL,
+  cv_folds = 5,
+  repeated_cv = 1
+)
 }
 \arguments{
 \item{df}{data.frame}
@@ -12,6 +20,9 @@ pp_score(df, x, y, sample_size = NULL, cv_folds = 5, repeated_cv = 1)
 \item{x}{\code{str} name of features in \code{df}}
 
 \item{y}{\code{str} target feature}
+
+\item{metric}{\code{str} Machine learning metric to evaluate on. Choose between
+\emph{roc_auc}, \emph{pr_auc}, \emph{F1}}
 
 \item{sample_size}{\code{int} random sample taken from \code{df} to speed
 up calculations. If \emph{NULL} all samples are used.}

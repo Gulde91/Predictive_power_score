@@ -2,6 +2,8 @@
 
 export("%>%")
 importFrom(MLmetrics,AUC)
+importFrom(MLmetrics,F1_Score)
+importFrom(MLmetrics,PRAUC)
 importFrom(magrittr,"%>%")
 importFrom(rpart,rpart)
 importFrom(stats,na.omit)

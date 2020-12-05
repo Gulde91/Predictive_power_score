@@ -13,10 +13,12 @@
 #' up calculations. If *NULL* all samples are used.
 #' @param cv_folds number of cross validations folds
 #' @param repeated_cv `int` number of repeated cross validations
+#' @param metric `str` Machine learning metric to evaluate on. Choose between
+#' *roc_auc*, *pr_auc*, *F1*
 #'
 #' @return A list with the predictive power score for each feature in `x`
 #'
-pp_score <- function(df, x, y, sample_size = NULL,
+pp_score <- function(df, x, y, metric = "roc_auc", sample_size = NULL,
                      cv_folds = 5, repeated_cv = 1) {
 
   stopifnot(is.data.frame(df), c(x, y) %in% names(df))
@@ -46,13 +48,15 @@ pp_score <- function(df, x, y, sample_size = NULL,
 #' up calculations. If *NULL* all samples are used.
 #' @param cv_folds `int` number of cross validations folds
 #' @param repeated_cv `int` number of repeated cross validations
+#' @param metric `str` Machine learning metric to evaluate on. Choose between
+#' *roc_auc*, *pr_auc*, *F1*.
 #'
 #' @importFrom rpart rpart
 #'
 #' @return The predictive power score for `x`.
 #'
-score <- function(df, x, y, metric, sample_size = NULL, cv_folds = 5L,
-                  repeated_cv = 1L) {
+score <- function(df, x, y, metric = "roc_auc", sample_size = NULL,
+                  cv_folds = 5L, repeated_cv = 1L) {
 
   stopifnot(is.numeric(df[[x]]), length(unique(df[[y]])) == 2)
 
@@ -101,9 +105,9 @@ score <- function(df, x, y, metric, sample_size = NULL, cv_folds = 5L,
 #' @param df `data.frame` test data to score
 #' @param label `numeric` target vector
 #' @param metric `str` Machine learning metric to evaluate on. Choose between
-#' *roc_auc*.
+#' *roc_auc*, *pr_auc*, *F1*.
 #'
-#' @importFrom MLmetrics AUC
+#' @importFrom MLmetrics AUC PRAUC F1_Score
 #' @importFrom stats predict na.omit
 #'
 #' @return `numeric` calculated ml metric
@@ -115,6 +119,16 @@ calculate_metric <- function(model, df, label, metric) {
 
     pred <- predict(model, df)[, 2]
     out <- AUC(pred, label)
+
+  } else if (metric == "pr_auc") {
+
+    pred <- predict(model, df)[, 2]
+    out <- PRAUC(pred, label)
+
+  } else if (metric == "F1") {
+
+    pred <- predict(model, df,type = "class")
+    out <- F1_Score(y_true = label, y_pred = pred)
 
   } else {
     stop(paste(metric, "is not a valid option!"))

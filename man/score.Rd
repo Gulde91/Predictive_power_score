@@ -4,7 +4,15 @@
 \alias{score}
 \title{Calculates predictive power score}
 \usage{
-score(df, x, y, sample_size = NULL, cv_folds = 5L, repeated_cv = 1L)
+score(
+  df,
+  x,
+  y,
+  metric = "roc_auc",
+  sample_size = NULL,
+  cv_folds = 5L,
+  repeated_cv = 1L
+)
 }
 \arguments{
 \item{df}{\code{data.frame} input data which contains \code{x} and \code{y}}
@@ -12,6 +20,9 @@ score(df, x, y, sample_size = NULL, cv_folds = 5L, repeated_cv = 1L)
 \item{x}{\code{str} name of feature}
 
 \item{y}{\code{str} name of target}
+
+\item{metric}{\code{str} Machine learning metric to evaluate on. Choose between
+\emph{roc_auc}, \emph{pr_auc}, \emph{F1}.}
 
 \item{sample_size}{\code{int} random sample taken from \code{df} to speed
 up calculations. If \emph{NULL} all samples are used.}
