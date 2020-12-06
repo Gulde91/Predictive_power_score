@@ -1,5 +1,7 @@
 context("functions")
 
+
+
 test_that("Testing score", {
 
   # creating test data
@@ -7,7 +9,7 @@ test_that("Testing score", {
   set.seed(3)
   test_df <- data.frame(y = sample(0:1, n_obs, replace = TRUE),
                         x = rnorm(n_obs),
-                        n_na = NA)
+                        x_na = NA_real_)
 
   # applying function
   out <- score(test_df, "x", "y", cv_folds = 2, repeated_cv = 2)
@@ -16,9 +18,10 @@ test_that("Testing score", {
   val_data <- list(pp_score = .5077,
                    eval_metric = "roc_auc",
                    cv_scores = list(`1` = c(.4948, .4935),
-                                   `2` = c(.4458, .5967)))
+                                    `2` = c(.4458, .5967)))
 
   expect_equal(out, val_data, tolerance = 0.4)
+  expect_error(score(test_df, "x_na", "y"), "Zero rows in data after removing NA's!")
 
 })
 
