@@ -1,5 +1,27 @@
 context("functions")
 
+test_that("Testing score", {
+
+  # creating test data
+  n_obs <- 100
+  set.seed(3)
+  test_df <- data.frame(y = sample(0:1, n_obs, replace = TRUE),
+                        x = rnorm(n_obs),
+                        n_na = NA)
+
+  # applying function
+  out <- score(test_df, "x", "y", cv_folds = 2, repeated_cv = 2)
+
+  # testing
+  val_data <- list(pp_score = .5077,
+                   eval_metric = "roc_auc",
+                   cv_scores = list(`1` = c(.4948, .4935),
+                                   `2` = c(.4458, .5967)))
+
+  expect_equal(out, val_data, tolerance = 0.4)
+
+})
+
 test_that("Testing calculate_metric", {
 
   # creating test data
