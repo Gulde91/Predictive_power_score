@@ -109,7 +109,7 @@ score <- function(df, x, y, metric = "roc_auc", sample_size = NULL,
 #' *roc_auc*, *pr_auc*, *F1*.
 #'
 #' @importFrom MLmetrics AUC PRAUC F1_Score
-#' @importFrom stats predict na.omit
+#' @importFrom stats predict
 #'
 #' @return `numeric` calculated ml metric
 #'
