@@ -26,7 +26,7 @@ pp_score <- function(df, x, y, metric = "roc_auc", sample_size = NULL,
   results <- list()
 
   for (i in x) {
-    results[[i]] <- score(df, i, y, metric, sample_size, cv_folds, repeated_cv)
+    results[i] <- score(df, i, y, sample_size, cv_folds, repeated_cv)
   }
 
   return(results)
@@ -92,6 +92,8 @@ score <- function(df, x, y, metric = "roc_auc", sample_size = NULL,
 
     }
   }
+
+  mean(unlist(results))
 
   return(list(pp_score = mean(unlist(results)),
               eval_metric = metric,
