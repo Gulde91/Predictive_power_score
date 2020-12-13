@@ -1,33 +1,6 @@
 context("functions")
 
-test_that("Testing pp_score", {
 
- # creating test data
-  n_obs <- 100
-  set.seed(3)
-  test_df <- data.frame(y = sample(0:1, n_obs, replace = TRUE),
-                        x_1 = rnorm(n_obs),
-                        x_2 = runif(n_obs))
-
-  # applying function
-  out <- pp_score(df = test_df, x = c("x_1", "x_2"), y = "y",
-                  cv_folds = 2, repeated_cv = 2)
-
-  # testing
-  val_data <- list(x_1 = list(pp_score = .5065,
-                              eval_metric = "roc_auc",
-                              cv_scores = list(`1` = c(.4820, .6101),
-                                               `2` = c(.5102, .4239))
-                              ),
-                   x_2 = list(pp_score = .5629,
-                              eval_metric = "roc_auc",
-                              cv_scores = list(`1` = c(.5610, .5149),
-                                               `2` = c(.5798, .5958))
-                              )
-                   )
-  expect_equal(out, val_data, tolerance = 0.001)
-
-})
 
 test_that("Testing score", {
 
