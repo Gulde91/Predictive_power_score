@@ -17,8 +17,8 @@ test_that("Testing score", {
   # testing
   val_data <- list(pp_score = .5077,
                    eval_metric = "roc_auc",
-                   cv_scores = list(`1` = c(.4948, .4935),
-                                    `2` = c(.4458, .5967)))
+                   cv_scores = list("cv_repeat_1" = c(.4948, .4935),
+                                    "cv_repeat_2" = c(.4458, .5967)))
 
   expect_equal(out, val_data, tolerance = 0.4)
   expect_error(score(test_df, "x_na", "y"), "Zero rows in data after removing NA's!")

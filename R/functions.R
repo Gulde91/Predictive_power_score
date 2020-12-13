@@ -67,15 +67,15 @@ score <- function(df, x, y, metric = "roc_auc", sample_size = NULL,
   # Looping over repeated cv and cv folds
   results <- list()
 
-  for(j in 1:repeated_cv) {
+  for(j in seq(repeated_cv)) {
 
     # Sampling data
     df_sampled <- sample_data(df, sample_size)
 
     # Identifying cross validations folds
-    cv <- sample(1:cv_folds, size = nrow(df_sampled), replace = TRUE)
+    cv <- sample(seq(cv_folds), size = nrow(df_sampled), replace = TRUE)
 
-    for (i in 1:cv_folds) {
+    for (i in seq(cv_folds)) {
 
       # Splitting data
       train <- df_sampled[cv != i, ]
@@ -88,8 +88,7 @@ score <- function(df, x, y, metric = "roc_auc", sample_size = NULL,
       out <- calculate_metric(fit, test[x], test[[y]], metric)
 
       # Save in results
-      results[[as.character(j)]][i] <- out
-
+      results[[paste0("cv_repeat_", j)]][i] <- out
     }
   }
 
